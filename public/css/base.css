@@ -1,0 +1,272 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+/* 容器樣式 */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1;
+}
+
+/* 菜單樣式 */
+.menu {
+    width: 200px;
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    top: 0;
+    left: 0;
+}
+
+.menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #ffffff;
+    border: 1px solid #495057;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.menu a:hover {
+    background-color: #007bff;
+    color: #ffffff;
+    transform: scale(1.02);
+}
+
+.menu a img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* 内容区域样式 */
+.content {
+    margin-left: 220px;
+    padding: 20px;
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: auto;
+    transition: margin-left 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.content h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 700;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+/* 登入登出 */
+.x-auth-buttons {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.auth-buttons .btn {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 按鈕樣式 */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #fff;
+    box-shadow: none;
+}
+
+/* 按鈕 */
+.btn-logout {
+    background: linear-gradient(45deg, #dc3545, #c82333);
+}
+
+.btn-logout:hover {
+    background: linear-gradient(45deg, #c82333, #bd2130);
+    transform: translateY(-2px);
+}
+
+.btn-login {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+}
+
+.btn-login:hover {
+    background: linear-gradient(45deg, #0056b3, #003d79);
+    transform: translateY(-2px);
+}
+
+.btn-register {
+    background: linear-gradient(45deg, #28a745, #218838);
+}
+
+.btn-register:hover {
+    background: linear-gradient(45deg, #218838, #1e7e34);
+    transform: translateY(-2px);
+}
+
+.btn-dark-orange {
+    background: linear-gradient(45deg, #fd7e14, #e36c0b);
+}
+
+.btn-dark-orange:hover {
+    background: linear-gradient(45deg, #e36c0b, #c7510b);
+    transform: translateY(-2px);
+}
+
+.btn-dark-yellow {
+    background: linear-gradient(45deg, #ffc107, #ffca28);
+}
+
+.btn-dark-yellow:hover {
+    background: linear-gradient(45deg, #ffca28, #f8c542);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, #6c757d, #5a6268);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(45deg, #5a6268, #4e555b);
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border: 2px solid #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* 隱藏樣式 */
+.collapse-hidden {
+    display: none;
+}
+
+/* 表格 */
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    text-align: left;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* 輸入框 */
+.custom-input {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    height: 2.5rem;
+    box-sizing: border-box;
+    border-radius: 0.375rem;
+}
+
+.custom-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    height: 2.5rem;
+}
+
+.custom-button-outline {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    height: 2.5rem;
+    color: #e53e3e;
+    border: 1px solid #e53e3e;
+}
+
+.custom-button-outline:hover {
+    background-color: #e53e3e;
+    color: #ffffff;
+}
+
+/* 下拉面板 */
+.details-panel {
+    display: none;
+}
+
+.details-panel .table {
+    border: none;
+    border-collapse: collapse;
+}
+
+.details-panel .table td,
+.details-panel .table th {
+    border: none;
+    padding: 8px;
+}
+
+.details-panel .table tr {
+    border-bottom: none;
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+    .menu {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: none;
+    }
+}
