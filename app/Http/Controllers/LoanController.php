@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\LoanService;
 use App\Models\Loan;
 use App\Models\Creditor;
 use App\Models\DebtorDetail;
 use App\Models\Repayment;
 use Carbon\Carbon;
+use App\Events\RepaymentNotification;
 
 class LoanController extends Controller
 {
+
+    protected $loanService;
+
+    public function __construct(LoanService $loanService)
+    {
+        $this->loanService = $loanService;
+    }
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -28,7 +37,7 @@ class LoanController extends Controller
 
         // 計算貸款餘額跟已償還的本金
         foreach ($loans as $loan) {
-            $loanBalance = $this->calculateLoanBalance($loan);
+            $loanBalance = $this->loanService->calculateLoanBalance($loan);
             $loan->loan_balance = $loanBalance;
             $loan->repaid_principal = $loan->loan_amount - $loanBalance;
         }
@@ -54,6 +63,9 @@ class LoanController extends Controller
             'repayment_method' => 'required|in:principal_and_interest,interest_only',
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
+            'creditors' => 'nullable|array',
+            'creditors.*.creditor_id' => 'nullable|exists:creditors,id',
+            'creditors.*.amount' => 'nullable|numeric|min:0',
         ]);
 
         $debtorDetail = DebtorDetail::create([
@@ -67,7 +79,7 @@ class LoanController extends Controller
             'loan_amount' => $validatedData['loan_amount'],
             'installments' => $validatedData['installments'],
             'interest_rate' => $validatedData['interest_rate'],
-            'monthly_payment_amount' => $this->calculateMonthlyPayment(
+            'monthly_payment_amount' => $this->loanService->calculateMonthlyPayment(
                 $validatedData['loan_amount'],
                 $validatedData['interest_rate'],
                 $validatedData['installments'],
@@ -78,43 +90,13 @@ class LoanController extends Controller
             'debtor_detail_id' => $debtorDetail->id,
         ]);
 
-        $this->attachCreditors($loan, $request->input('creditors'));
-        $this->createDebtorDetail($loan->id, $validatedData['phone'], $validatedData['address']);
+        if (!empty($validatedData['creditors'])) {
+            foreach ($validatedData['creditors'] as $creditor) {
+                $loan->creditors()->attach($creditor['creditor_id'], ['amount' => floatval($creditor['amount'])]);
+            }
+        }
 
         return redirect()->route('loans.create')->with('success', '新增成功');
-    }
-
-    private function calculateMonthlyPayment($loanAmount, $interestRate, $installments, $repaymentMethod)
-    {
-        if ($repaymentMethod == 'principal_and_interest') {
-            return $this->calculateAmortizingTotal($loanAmount, $interestRate, $installments);
-        } elseif ($repaymentMethod == 'interest_only') {
-            return ($loanAmount * $interestRate) / 100 / 12;
-        }
-        return 0;
-    }
-    private function calculateAmortizingTotal($principal, $annualInterestRate, $numberOfPayments)
-    {
-        $monthlyInterestRate = $annualInterestRate / 12 / 100;
-        $monthlyPayment = $principal * $monthlyInterestRate / (1 - pow(1 + $monthlyInterestRate, -$numberOfPayments));
-        return $monthlyPayment;
-    }
-
-    private function calculateLoanBalance($loan)
-    {
-        $currentDate = Carbon::now();
-        $loanStartDate = Carbon::parse($loan->loan_date);
-        $monthsElapsed = min($loanStartDate->diffInMonths($currentDate), $loan->installments);
-
-        $remainingPrincipal = $loan->loan_amount;
-
-        for ($i = 0; $i < $monthsElapsed; $i++) {
-            $monthlyInterest = $remainingPrincipal * ($loan->interest_rate / 12 / 100);
-            $monthlyPrincipal = $this->calculateAmortizingTotal($loan->loan_amount, $loan->interest_rate, $loan->installments) - $monthlyInterest;
-            $remainingPrincipal -= $monthlyPrincipal;
-        }
-
-        return max($remainingPrincipal, 0);
     }
 
     public function update(Request $request, $id)
@@ -142,6 +124,10 @@ class LoanController extends Controller
 
         $totalInterest = $loans->where('action', '!=', '已還款')->sum('monthly_payment_amount');
 
+        foreach ($loans as $loan) {
+            event(new RepaymentNotification('Hello, this is a test message!'));
+        }
+
         return view('loans.current-month', compact('loans', 'currentDate', 'totalInterest'));
     }
     private function calculateAmountDue($loan, $currentDate)
@@ -153,21 +139,5 @@ class LoanController extends Controller
         $periodsElapsed = $loanStartDate->diffInMonths($currentDate);
 
         return max(0, $monthlyAmount * ($installments - $periodsElapsed));
-    }
-    private function attachCreditors(Loan $loan, array $creditors)
-    {
-        foreach ($creditors as $creditor) {
-            $loan->creditors()->attach($creditor['creditor_id'], ['amount' => floatval($creditor['amount'])]);
-        }
-    }
-    private function createDebtorDetail($loanId, $phone = null, $address = null)
-    {
-        if ($phone || $address) {
-            DebtorDetail::create([
-                'loan_id' => $loanId,
-                'phone' => $phone,
-                'address' => $address,
-            ]);
-        }
     }
 }

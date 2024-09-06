@@ -37,4 +37,29 @@
         </tfoot>
     </table>
 </div>
+
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.2/dist/echo.iife.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('DOM fully loaded and parsed');
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: '927e826437124db45fca',
+            cluster: 'ap3',
+            encrypted: true
+        });
+        console.log(window.Echo);
+
+
+        window.Echo.channel('main-hurricane-774')
+            .listen('RepaymentNotification', (e) => {
+                console.log('Event received:', e);
+                console.log('Message:', e.message);
+
+            });
+    });
+</script>
 @endsection

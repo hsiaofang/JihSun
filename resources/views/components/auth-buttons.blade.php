@@ -4,6 +4,9 @@
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             登出
         </a>
+        <a href="#" class="btn btn-notifications">
+            <i class="fas fa-bell"></i>
+        </a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>

@@ -29,9 +29,6 @@
                 @endif
             </form>
 
-
-
-
         </div>
 
         <div id="create-form-container" class="mb-4" style="display: none;">
@@ -101,11 +98,6 @@
                             <div class="border border-gray-300 p-3 rounded bg-gray-50">
                                 <table class="table">
                                     <tbody>
-                                        <tr>
-                                            <td colspan="4">
-                                                <h3>債務人資料</h3>
-                                            </td>
-                                        </tr>
                                         @if($loan->debtorDetail)
                                             <tr class="info-row">
                                                 <td>電話: {{ $loan->debtorDetail->phone ?? '无' }}</td>
@@ -137,9 +129,6 @@
                             </div>
                         </td>
                     </tr>
-
-
-
                 @endforeach
             </tbody>
         </table>

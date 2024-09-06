@@ -78,11 +78,11 @@
                 @for($i = 0; $i < 4; $i++)
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                         <div class="form-group">
-                            <label for="creditor_id_{{ $i + 1 }}" class="block text-sm font-medium text-gray-700">債權人
+                            <label for="creditor_id_{{ $i + 1 }}" class="block text-sm font-medium text-gray-700">债权人
                                 {{ $i + 1 }}</label>
                             <select name="creditors[{{ $i }}][creditor_id]" id="creditor_id_{{ $i + 1 }}"
                                 class="form-control block w-full mt-1 border-gray-300 rounded-md shadow-sm">
-                                <option value="">請選擇</option>
+                                <option value="">请选择</option>
                                 @foreach($creditors as $creditor)
                                     <option value="{{ $creditor->id }}">{{ $creditor->name }}</option>
                                 @endforeach
@@ -96,6 +96,7 @@
                     </div>
                 @endfor
             </div>
+
         </div>
         <div class="form-group mb-4">
             <label for="notes" class="block text-sm font-medium text-gray-700">備註</label>
@@ -103,7 +104,7 @@
                 class="form-control block w-full mt-1 border-gray-300 rounded-md shadow-sm"></textarea>
         </div>
         <div class="btn-align-right">
-            <button type="submit" class="btn btn-dark-orange px-4 py-2 rounded-md hover:bg-orange-600">提交</button>
+            <button type="submit" class="btn btn-dark-orange btn-spacing">提交</button>
         </div>
 
     </form>

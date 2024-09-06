@@ -1,19 +1,3 @@
-<style>
-    .btn-align-right {
-        position: relative;
-        height: 50px;
-    }
-
-    .btn-align-right .btn {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        background-color: #E67E22;
-        color: white;
-        border-color: #E67E22;
-    }
-</style>
-
 @extends('layouts.app')
 
 @section('title', '新增還款記錄')
